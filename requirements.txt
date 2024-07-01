@@ -1,6 +1,6 @@
-streamlit>=0.89.0
-numpy>=1.19.5
-tensorflow>=2.4.0
-scikit-learn>=0.24.1
-pillow>=8.1.0
-opencv-python-headless>=4.5.1.48
+streamlit
+numpy
+tensorflow==2.8.0  # Specify the exact version of TensorFlow that works with your setup
+scikit-learn
+pillow
+opencv-python-headless
