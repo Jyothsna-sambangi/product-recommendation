@@ -1,5 +1,7 @@
-import streamlit as st
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress INFO and WARNING messages
+
+import streamlit as st
 from PIL import Image
 import numpy as np
 import pickle
