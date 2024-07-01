@@ -1,2 +1,6 @@
 streamlit
-requests
+tensorflow==2.16.1
+numpy
+pandas
+pillow
+scikit-learn
