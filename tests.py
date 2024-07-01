@@ -100,7 +100,12 @@ if uploaded_file:
                 st.write("Here are some similar images:")
                 columns = st.columns(5)
                 for i, col in enumerate(columns):
-                    col.image(filenames[indices[0][i]])
+                    img_path = filenames[indices[0][i]]
+                    st.write(f"Checking file: {img_path}")
+                    if os.path.exists(img_path):
+                        col.image(img_path)
+                    else:
+                        st.error(f"File not found: {img_path}")
             else:
                 st.error("An error occurred while finding similar images.")
         else:
