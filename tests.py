@@ -1,11 +1,13 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress INFO and WARNING messages
 
+import tensorflow as tf
+tf.get_logger().setLevel('ERROR')  # Set TensorFlow's logger to only display ERROR messages
+
 import streamlit as st
 from PIL import Image
 import numpy as np
 import pickle
-import tensorflow as tf
 from tensorflow.keras.preprocessing import image as keras_image
 from tensorflow.keras.layers import GlobalMaxPooling2D
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
@@ -78,3 +80,4 @@ if uploaded_file:
             col.image(filenames[indices[0][i]])
     else:
         st.error("An error occurred during file upload.")
+
