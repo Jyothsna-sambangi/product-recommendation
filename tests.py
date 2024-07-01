@@ -10,9 +10,6 @@ from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from sklearn.neighbors import NearestNeighbors
 from numpy.linalg import norm
 
-# Suppress TensorFlow INFO and WARNING messages
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-tf.get_logger().setLevel('ERROR')
 
 # Load the precomputed feature list and filenames
 with open('embeddings2.pkl', 'rb') as f:
