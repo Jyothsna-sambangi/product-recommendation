@@ -9,6 +9,48 @@ from tensorflow.keras.layers import GlobalMaxPooling2D
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from sklearn.neighbors import NearestNeighbors
 from numpy.linalg import norm
+import streamlit as st
+import os
+
+# Function to convert GitHub path to local path format (not needed for this script)
+# def github_to_local_path(github_path):
+#     return github_path.replace("/", "\\")
+
+# Main Streamlit app code
+def main():
+    st.title("Product Recommendation System")
+
+    # Sidebar for image options
+    st.sidebar.header("Image Options")
+    option = st.sidebar.radio(
+        "Choose an option:",
+        ("Upload an image", "Display image from directory")
+    )
+
+    if option == "Upload an image":
+        # Handle file upload
+        uploaded_file = st.file_uploader("Upload an image")
+        if uploaded_file:
+            # Display the uploaded image
+            display_img = st.image(uploaded_file, caption='Uploaded Image')
+
+    elif option == "Display image from directory":
+        # Example image filenames (replace with your actual image filenames)
+        image_filenames = [
+            "images_with_product_ids/10037.jpg",
+            "images_with_product_ids/10039.jpg",  # Add more filenames as needed
+        ]
+
+        # Display images from the directory
+        st.write("Displaying images from directory:")
+        for filename in image_filenames:
+            if os.path.exists(filename):
+                st.image(filename, caption=f"Image: {filename}")
+            else:
+                st.error(f"Image not found at path: {filename}")
+
+if __name__ == "__main__":
+    main()
 
 # Load the precomputed feature list and filenames
 with open('embeddings2.pkl', 'rb') as f:
