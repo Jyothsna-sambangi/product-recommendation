@@ -70,14 +70,11 @@ if uploaded_file:
         indices = find_similar_images(features, feature_list)
 
         # Display recommended images
-        # Display recommended images
         st.write("Here are some similar images:")
         columns = st.columns(5)
         for i, col in enumerate(columns):
-        # Construct full image path assuming filenames include directory
-       image_path = filenames[indices[0][i]]
-       col.image(image_path)
-
-      
+            # Construct full image path assuming filenames include directory
+            image_path = filenames[indices[0][i]]
+            col.image(image_path)
     else:
         st.error("An error occurred during file upload.")
