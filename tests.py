@@ -74,12 +74,11 @@ if uploaded_file:
         columns = st.columns(5)
         for i, col in enumerate(columns):
             try:
-                # Adjusted to handle backslashes in filenames
-                image_path = os.path.join('images_with_product_ids', filenames[indices[0][i]].replace('\\', '/'))
+                # Adjusted to handle backslashes in filenames and fix path duplication issue
+                image_path = os.path.join('images_with_product_ids', filenames[indices[0][i]])
                 col.image(image_path)
             except Exception as e:
                 st.warning(f"Error displaying image: {e}")
 
     else:
         st.error("An error occurred during file upload.")
-
