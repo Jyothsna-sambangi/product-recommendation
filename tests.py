@@ -73,8 +73,13 @@ if uploaded_file:
         st.write("Here are some similar images:")
         columns = st.columns(5)
         for i, col in enumerate(columns):
-            # Adjusted to handle backslashes in filenames
-            image_path = os.path.join('images_with_product_ids', filenames[indices[0][i]].replace('\\', '/'))
-            col.image(image_path)
+            try:
+                # Adjusted to handle backslashes in filenames
+                image_path = os.path.join('images_with_product_ids', filenames[indices[0][i]].replace('\\', '/'))
+                col.image(image_path)
+            except Exception as e:
+                st.warning(f"Error displaying image: {e}")
+
     else:
         st.error("An error occurred during file upload.")
+
