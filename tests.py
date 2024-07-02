@@ -62,7 +62,7 @@ def github_to_local_path(github_path):
 def main():
     st.title("Product Recommendation System")
 
-    # Sidebar for uploading or displaying image from GitHub
+    # Sidebar for image options
     st.sidebar.header("Image Options")
     option = st.sidebar.radio(
         "Choose an option:",
@@ -73,9 +73,9 @@ def main():
         # Handle file upload
         uploaded_file = st.file_uploader("Upload an image")
         if uploaded_file:
+            # Save and display uploaded image
             file_path = save_uploaded_file(uploaded_file)
             if file_path:
-                # Display the uploaded image
                 display_img = Image.open(uploaded_file)
                 st.image(display_img, caption='Uploaded Image')
 
@@ -100,9 +100,10 @@ def main():
         # Convert GitHub path to local path format (if needed)
         local_image_path = github_to_local_path(github_image_path)
 
-        # Display using converted local path
+        # Check if local path exists and display image
         if os.path.exists(local_image_path):
-            st.image(local_image_path, caption='Image from GitHub (Converted Local Path)')
+            display_img = Image.open(local_image_path)
+            st.image(display_img, caption='Image from GitHub (Converted Local Path)')
         else:
             st.error(f"Image not found at path: {local_image_path}")
 
