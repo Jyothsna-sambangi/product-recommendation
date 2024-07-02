@@ -25,8 +25,6 @@ model = tf.keras.Sequential([
     GlobalMaxPooling2D()
 ])
 
-st.title('Product Recommendation System')
-
 # Function to save uploaded file
 def save_uploaded_file(uploaded_file):
     try:
@@ -56,25 +54,64 @@ def find_similar_images(features, feature_list):
     _, indices = knn.kneighbors([features])
     return indices
 
-# Handle file upload
-uploaded_file = st.file_uploader("Upload an image")
-if uploaded_file:
-    file_path = save_uploaded_file(uploaded_file)
-    if file_path:
-        # Display the uploaded image
-        display_img = Image.open(uploaded_file)
-        st.image(display_img, caption='Uploaded Image')
+# Function to convert GitHub path to local path format
+def github_to_local_path(github_path):
+    return github_path.replace("/", "\\")
 
-        # Extract features and find recommendations
-        features = extract_image_features(file_path, model)
-        indices = find_similar_images(features, feature_list)
+# Main Streamlit app code
+def main():
+    st.title("Product Recommendation System")
 
-        # Display recommended images
-        st.write("Here are some similar images:")
-        columns = st.columns(5)
-        for i, col in enumerate(columns):
-            # Construct full image path assuming filenames include directory
-            image_path = filenames[indices[0][i]]
-            col.image(image_path)
-    else:
-        st.error("An error occurred during file upload.")
+    # Sidebar for uploading or displaying image from GitHub
+    st.sidebar.header("Image Options")
+    option = st.sidebar.radio(
+        "Choose an option:",
+        ("Upload an image", "Display image from GitHub")
+    )
+
+    if option == "Upload an image":
+        # Handle file upload
+        uploaded_file = st.file_uploader("Upload an image")
+        if uploaded_file:
+            file_path = save_uploaded_file(uploaded_file)
+            if file_path:
+                # Display the uploaded image
+                display_img = Image.open(uploaded_file)
+                st.image(display_img, caption='Uploaded Image')
+
+                # Extract features and find recommendations
+                features = extract_image_features(file_path, model)
+                indices = find_similar_images(features, feature_list)
+
+                # Display recommended images
+                st.write("Here are some similar images:")
+                columns = st.columns(5)
+                for i, col in enumerate(columns):
+                    image_path = filenames[indices[0][i]]
+                    col.image(image_path)
+
+            else:
+                st.error("An error occurred during file upload.")
+
+    elif option == "Display image from GitHub":
+        # Example GitHub path (replace with your actual GitHub paths)
+        github_image_path = "images_with_product_ids/10037.jpg"
+
+        # Convert GitHub path to local path format (if needed)
+        local_image_path = github_to_local_path(github_image_path)
+
+        # Display using converted local path
+        if os.path.exists(local_image_path):
+            st.image(local_image_path, caption='Image from GitHub (Converted Local Path)')
+        else:
+            st.error(f"Image not found at path: {local_image_path}")
+
+        # Optionally, display directly using GitHub path if your environment supports it
+        # st.image(github_image_path, caption='Image from GitHub (GitHub Path)')
+
+        # Optionally, normalize the path to handle mixed format
+        normalized_path = os.path.normpath(github_image_path)
+        st.image(normalized_path, caption='Normalized Image Path')
+
+if __name__ == "__main__":
+    main()
