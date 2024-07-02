@@ -73,7 +73,10 @@ if uploaded_file:
         st.write("Here are some similar images:")
         columns = st.columns(5)
         for i, col in enumerate(columns):
-            image_path = f"https://raw.githubusercontent.com/Jyothsna-sambangi/product-recommendation/main/images_with_product_ids/{filenames[indices[0][i]]}"
-            col.image(image_path)
+            try:
+                image_path = f"https://raw.githubusercontent.com/Jyothsna-sambangi/product-recommendation/main/images_with_product_ids/{filenames[indices[0][i]]}"
+                col.image(image_path)
+            except IndexError:
+                pass  # Handle cases where indices go out of bounds
     else:
         st.error("An error occurred during file upload.")
