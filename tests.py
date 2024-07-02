@@ -9,13 +9,24 @@ from tensorflow.keras.layers import GlobalMaxPooling2D
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from sklearn.neighbors import NearestNeighbors
 from numpy.linalg import norm
+from github import Github
+
+# GitHub repository and directory information
+github_access_token = 'your_access_token_here'  # Replace with your GitHub access token
+repository_name = 'Jyothsna-sambangi/product-recommendation'
+directory_path = 'images_with_product_ids'
+
+# Initialize GitHub instance
+g = Github(github_access_token)
+repo = g.get_repo(repository_name)
+contents = repo.get_contents(directory_path)
+
+# Extract filenames from GitHub
+filenames = [file.name for file in contents if file.type == 'file']
 
 # Load the precomputed feature list and filenames
 with open('embeddings2.pkl', 'rb') as f:
     feature_list = np.array(pickle.load(f))
-
-with open('filenames2.pkl', 'rb') as f:
-    filenames = pickle.load(f)
 
 # Initialize the ResNet50 model
 base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
@@ -73,10 +84,13 @@ if uploaded_file:
         st.write("Here are some similar images:")
         columns = st.columns(5)
         for i, col in enumerate(columns):
-            try:
-                image_path = f"https://raw.githubusercontent.com/Jyothsna-sambangi/product-recommendation/main/images_with_product_ids/{filenames[indices[0][i]]}"
+            image_index = indices[0][i]
+            if image_index < len(filenames):
+                image_filename = filenames[image_index]
+                image_path = f"https://raw.githubusercontent.com/Jyothsna-sambangi/product-recommendation/main/images_with_product_ids/{image_filename}"
                 col.image(image_path)
-            except IndexError:
-                pass  # Handle cases where indices go out of bounds
+            else:
+                st.warning(f"No image found for index {image_index}")
     else:
         st.error("An error occurred during file upload.")
+
